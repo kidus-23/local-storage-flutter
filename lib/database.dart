@@ -102,5 +102,5 @@ class Journal {
 class JournalEdit {
   String? action;
   Journal? journal;
-  JournalEdit({this.action, this.journal});
+  JournalEdit({required this.action, required this.journal});
 }
