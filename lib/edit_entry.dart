@@ -52,6 +52,7 @@ class _EditEntryState extends State<EditEntry> {
     _noteController.dispose();
     _moodFocus.dispose();
     _noteFocus.dispose();
+    super.dispose(); // Call the overridden method
   }
 
   Future<DateTime> _selectDate(DateTime selectedDate) async {
@@ -132,7 +133,21 @@ class _EditEntryState extends State<EditEntry> {
                 onSubmitted: (submitted) {
                   FocusScope.of(context).requestFocus(_noteFocus);
                 },
-              )
+              ),
+              TextField(
+                controller: _noteController,
+                textInputAction: TextInputAction.done,
+                focusNode: _noteFocus,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(
+                  labelText: 'Note',
+                  hintText: 'Enter your note',
+                  icon: Icon(Icons.note),
+                ),
+                onSubmitted: (submitted) {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
             ],
           ),
         ),
