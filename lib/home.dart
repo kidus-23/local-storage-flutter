@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'edit_entry.dart';
 import 'database.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert'; // Import dart:convert for JSON encoding/decoding
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,146 +12,210 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _dbRoutine = DatabaseFileRoutine();
-  final List<Journal> _journals = [];
+  late Database _database;
 
   Future<List<Journal>> _loadJournals() async {
-    String content = await _dbRoutine.readJournals();
-    if (content.isEmpty) return [];
-    Database db = _dbRoutine.databaseFromJson(content);
-    return db.journals;
+    final journalJson = await DatabaseFileRoutine().readJournals();
+    _database = Database.fromJson(json.decode(journalJson));
+    _database.journals.sort((a, b) => b.date!.compareTo(a.date!));
+    return _database.journals;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadAndSetJournals();
+  void addOrEditJournal({
+    required bool add,
+    required int index,
+    required Journal journal,
+  }) async {
+    JournalEdit _journalEdit = JournalEdit(action: '', journal: journal);
+    _journalEdit = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEntry(
+          add: add,
+          index: index,
+          journalEdit: _journalEdit,
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+    switch (_journalEdit.action) {
+      case 'Save':
+        setState(() {
+          if (add) {
+            _database.journals.add(_journalEdit.journal);
+          } else {
+            _database.journals[index] = _journalEdit.journal;
+          }
+        });
+        await DatabaseFileRoutine()
+            .writeJournals(json.encode(_database.toJson()));
+        break;
+      case 'Cancel':
+        break;
+    }
   }
 
-  Future<void> _loadAndSetJournals() async {
-    List<Journal> journals = await _loadJournals();
-    setState(() {
-      _journals.clear();
-      _journals.addAll(journals);
-    });
+  Widget _buildListViewSeparated(AsyncSnapshot<List<Journal>> snapshot) {
+    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      return Center(
+        child: Text(
+          'No entries yet. Tap + to add one!',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: snapshot.data!.length,
+      itemBuilder: (BuildContext context, int index) {
+        final journal = snapshot.data![index];
+        final date = DateTime.parse(journal.date!);
+
+        return Dismissible(
+          key: Key(journal.id!),
+          background: Container(
+            color: Colors.red[400],
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          secondaryBackground: Container(
+            color: Colors.red[400],
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          child: InkWell(
+            onTap: () => addOrEditJournal(
+              add: false,
+              index: index,
+              journal: journal,
+            ),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDateColumn(date),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildEntryDetails(journal, date),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onDismissed: (direction) {
+            setState(() {
+              _database.journals.removeAt(index);
+            });
+            DatabaseFileRoutine()
+                .writeJournals(json.encode(_database.toJson()));
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDateColumn(DateTime date) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            DateFormat.d().format(date),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          Text(
+            DateFormat.E().format(date),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEntryDetails(Journal journal, DateTime date) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          DateFormat.yMMMEd().format(date),
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        if (journal.mood?.isNotEmpty == true) ...[
+          const SizedBox(height: 4),
+          Text(
+            journal.mood!,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+        if (journal.note?.isNotEmpty == true) ...[
+          const SizedBox(height: 8),
+          Text(
+            journal.note!,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Journal'),
+        elevation: 1,
+      ),
       body: FutureBuilder<List<Journal>>(
-        initialData: _journals.isEmpty ? null : _journals,
+        initialData: const [],
         future: _loadJournals(),
-        builder: (BuildContext context, AsyncSnapshot<List<Journal>> snapshot) {
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No journal entries found.'));
-          } else {
-            return _buildListViewSeparated(snapshot.data!);
           }
+          return _buildListViewSeparated(snapshot);
         },
       ),
       bottomNavigationBar: const BottomAppBar(
         shape: CircularNotchedRectangle(),
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: SizedBox.shrink(),
-        ),
+        child: Padding(padding: EdgeInsets.all(32.0)),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add Journal Entry',
-        onPressed: () async {
-          JournalEdit? result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditEntry(
-                add: true,
-                index: -1,
-                journalEdit: JournalEdit(
-                  action: 'Add',
-                  journal: Journal(
-                    id: DateTime.now().millisecondsSinceEpoch.toString(),
-                    mood: '',
-                    note: '',
-                    date: DateTime.now().toString(),
-                  ),
-                ),
-              ),
-            ),
-          );
-          if (result != null && result.action == 'Save') {
-            setState(() {
-              _journals.add(result.journal!);
-            });
-            await _saveJournals();
-            await _loadAndSetJournals(); 
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Future<void> _saveJournals() async {
-    Database db = Database(journals: _journals);
-    String json = _dbRoutine.databaseToJson(db);
-    await _dbRoutine.writeJournals(json);
-  }
-
-  //there is add/edit here
-  
-
-  void _addOrEdit(int index) async {
-    JournalEdit? result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditEntry(
-          add: false,
-          index: index,
-          journalEdit: JournalEdit(
-            action: 'Edit',
-            journal: _journals[index],
+        onPressed: () => addOrEditJournal(
+          add: true,
+          index: -1,
+          journal: Journal(
+            id: '',
+            date: DateTime.now().toIso8601String(),
+            mood: '',
+            note: '',
           ),
         ),
+        child: const Icon(Icons.add),
       ),
-    );
-    if (result != null && result.action == 'Save') {
-      setState(() {
-        _journals[index] = result.journal!;
-      });
-      await _saveJournals();
-      await _loadAndSetJournals(); // Reload the journals
-    }
-  }
-
-  Widget _buildListViewSeparated(List<Journal> data) {
-    return ListView.separated(
-      itemCount: data.length,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
-        String titleDate = DateFormat.yMMMd()
-            .format(DateTime.parse(data[index].date));
-        String subtitle =
-            data[index].mood + '\n' + data[index].note;
-        return Dismissible(
-          key: Key(data[index].id.toString()), // Fixed key assignment
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(24.0),
-            child: const Icon(Icons.delete, color: Colors.white), // Fixed Icon usage
-          ),
-          child: ListTile(
-            title: Text(titleDate),
-            subtitle: Text(subtitle),
-            onTap: () => _addOrEdit(index), // Add onTap to edit entry
-          ),
-        );
-      },
     );
   }
 }
