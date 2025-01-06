@@ -1,5 +1,5 @@
 {
-   "checksum": "9d4c5ac9daee6922d8dbc2c9e2429d24",
+   "checksum": "9e59c77a58c13443bf98b82e81c1f6d4",
    "roots": {
       "bookmark_bar": {
          "children": [ {
@@ -13,10 +13,24 @@
             "type": "url",
             "url": "https://quillbot.com/?utm_medium=paid_search&utm_source=google&utm_campaign=paraphrase_developing_brand&campaign_type=search",
             "visit_count": 1
+         }, {
+            "date_added": "13380317833703239",
+            "date_last_used": "0",
+            "guid": "a437bf56-c1bf-4ffb-b5d4-e8d2d3ec1e58",
+            "id": "7",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "Amharic Speech to Text - Amharic Speech Recognition",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://www.metaappz.com/Amharic_Speech_To_Text/Default.aspx?utm_source=chatgpt.com",
+            "visit_count": 1
          } ],
-         "date_added": "13379321459701301",
+         "date_added": "13380618068515682",
          "date_last_used": "0",
-         "date_modified": "13310849941226639",
+         "date_modified": "13380317833703239",
          "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
          "id": "1",
          "name": "Favorites bar",
@@ -25,7 +39,7 @@
       },
       "other": {
          "children": [  ],
-         "date_added": "13379321459701303",
+         "date_added": "13380618068515684",
          "date_last_used": "0",
          "date_modified": "0",
          "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
@@ -36,7 +50,7 @@
       },
       "synced": {
          "children": [  ],
-         "date_added": "13379321459701304",
+         "date_added": "13380618068515685",
          "date_last_used": "0",
          "date_modified": "0",
          "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
@@ -46,6 +60,6 @@
          "type": "folder"
       }
    },
-   "sync_metadata": "CkEKHgiIgQISCB0i+eyTAQAAKg4QABgBIAAoBTAAOABAABIAKhh2eVFaTVRYTStiQ2ZhaE5xUXFRUjVBPT1IA6AGDBKsAQgGEqcBChxRQ1dhM0NKb0xNOHRjVkRkWkREUEoyUlFsbTg9EiQyNDgwMmEzMy05ZDZkLTRlNWYtYTcyZS1hYTE5NGI4MjQ4YjMYACAAKAAwzbOOzrwyOI6o58PlMUCOqOfD5TFKHGY5ckRGQzhPRXdWU09CVkNUMUpYaGpmUVFHUT1aHiIcZ2ZWdEd5aUpRQ0pRNXhzYTRzNkhOallKeERBPWUmNxecwj4CYAUSjgEIARKJAQoceXhKLzZmdmtlY3I3a3A1RVF6QjR0V0xwZGJFPRIkOGU0OWFiMGEtZjNmMi01MzlhLThlODItMmI4YmJlYWVhZDMwGAAgACgAMJb15sPlMTic+ubD5TFAnPrmw+UxShxhUkNXTGdoRjliNUlucUtJRHZ1Si9qdlFrRmM9WgBlAAAAAMI+AmAAEo4BCAISiQEKHFljU1RvbnZFU1B3cUNzNEwyY3JWaHY2OEw5OD0SJDkzMmIyMjZjLWMwZDEtNTM5NC04ODgyLTBmYzgyZDc3MzZlYxgAIAAoADCX9ebD5TE4u/rmw+UxQLv65sPlMUocb1BWa2h3QlJiVjY1S0NXUjIrSU9OSFdvT3U4PVoAZQAAAADCPgJgABKOAQgDEokBChxuamdEdTg4ZUNydlhwODZwRDdmSEdjcUZwODg9EiQ1ZTA0NzgzYi1lMTE1LTVkMjUtOWY5My01ZTk4NjY1ZDljZjIYACAAKAAwnPXmw+UxOOv65sPlMUDr+ubD5TFKHHl6TkIwMWNuNTRBN2NSVTB1VCsvUGdtVHRVbz1aAGUAAAAAwj4CYAAwADgA",
+   "sync_metadata": "CkEKHgiIgQISCEfAQTqUAQAAKg4QABgBIAAoBTAAOABAABIAKhhpN00vaC9YWFhDUWRtc2YyU1FESGdRPT1IA6AGDBKsAQgGEqcBChxRQ1dhM0NKb0xNOHRjVkRkWkREUEoyUlFsbTg9EiQyNDgwMmEzMy05ZDZkLTRlNWYtYTcyZS1hYTE5NGI4MjQ4YjMYACAAKAAwzbOOzrwyOI6o58PlMUCOqOfD5TFKHGY5ckRGQzhPRXdWU09CVkNUMUpYaGpmUVFHUT1aHiIcZ2ZWdEd5aUpRQ0pRNXhzYTRzNkhOallKeERBPWUmNxecwj4CYAUSrQEIBxKoAQocaVNvODBERW95UnJ3WldQL2labEJFbllmVHVVPRIkYTQzN2JmNTYtYzFiZi00ZmZiLWI1ZDQtZThkMmQzZWMxZTU4GAAgACgAMMekhMPCMjjzpYTDwjJA86WEw8IyShxURjZWTkJLVFJ2ODh3akRSMnJrTVJGbGVFT2c9Wh8iHbNZZmhXRnQwajRmRFhFNi9sUVZEY0xGOHVwZzQ9ZdglXWLCPgJgBRKOAQgBEokBChx5eEovNmZ2a2VjcjdrcDVFUXpCNHRXTHBkYkU9EiQ4ZTQ5YWIwYS1mM2YyLTUzOWEtOGU4Mi0yYjhiYmVhZWFkMzAYACAAKAAwlvXmw+UxOJz65sPlMUCc+ubD5TFKHGFSQ1dMZ2hGOWI1SW5xS0lEdnVKL2p2UWtGYz1aAGUAAAAAwj4CYAASjgEIAhKJAQocWWNTVG9udkVTUHdxQ3M0TDJjclZodjY4TDk4PRIkOTMyYjIyNmMtYzBkMS01Mzk0LTg4ODItMGZjODJkNzczNmVjGAAgACgAMJf15sPlMTi7+ubD5TFAu/rmw+UxShxvUFZraHdCUmJWNjVLQ1dSMitJT05IV29PdTg9WgBlAAAAAMI+AmAAEo4BCAMSiQEKHG5qZ0R1ODhlQ3J2WHA4NnBEN2ZIR2NxRnA4OD0SJDVlMDQ3ODNiLWUxMTUtNWQyNS05ZjkzLTVlOTg2NjVkOWNmMhgAIAAoADCc9ebD5TE46/rmw+UxQOv65sPlMUoceXpOQjAxY241NEE3Y1JVMHVUKy9QZ21UdFVvPVoAZQAAAADCPgJgADAAOAA=",
    "version": 1
 }

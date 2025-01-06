@@ -37,6 +37,10 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+    packagingOptions {
+        pickFirst 'META-INF/kotlinx_coroutines_core.version'
+        pickFirst 'META-INF/kotlinx-coroutines-core.kotlin_module'
+    }
 }
 
 flutter {

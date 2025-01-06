@@ -38,6 +38,9 @@ class DatabaseFileRoutine {
         await writeJournals('{"journals": []}');
       }
       String contents = await file.readAsString();
+      if (contents.isEmpty) {
+        return '{"journals":[]}';
+      }
       return contents;
     } catch (e) {
       print('Error readJournals: $e');

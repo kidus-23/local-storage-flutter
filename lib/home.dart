@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'edit_entry.dart';
 import 'database.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert'; // Import dart:convert for JSON encoding/decoding
+import 'dart:convert'; 
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,6 +19,12 @@ class _HomeState extends State<Home> {
     _database = Database.fromJson(json.decode(journalJson));
     _database.journals.sort((a, b) => b.date!.compareTo(a.date!));
     return _database.journals;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadJournals().then((_) => setState(() {}));
   }
 
   void addOrEditJournal({
@@ -47,7 +53,7 @@ class _HomeState extends State<Home> {
             _database.journals[index] = _journalEdit.journal;
           }
         });
-        await DatabaseFileRoutine()
+        DatabaseFileRoutine()
             .writeJournals(json.encode(_database.toJson()));
         break;
       case 'Cancel':

@@ -20,31 +20,23 @@ class EditEntry extends StatefulWidget {
 }
 
 class _EditEntryState extends State<EditEntry> {
-  /// Holds the action to perform (save or cancel) and the associated journal.
   late JournalEdit _journalEdit;
 
-  /// Displays the title ("Add" or "Edit") based on whether we're creating or updating an entry.
   late String _title;
 
-  /// Stores the currently selected date for this journal entry.
   late DateTime _selectedDate;
 
-  /// Text controller for the user's mood input.
   final TextEditingController _moodController = TextEditingController();
 
-  /// Text controller for the user's note input.
   final TextEditingController _noteController = TextEditingController();
 
-  /// FocusNode for the mood TextField to manage keyboard focus.
   final FocusNode _moodFocus = FocusNode();
 
-  /// FocusNode for the note TextField to manage keyboard focus.
   final FocusNode _noteFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    /// Initialize fields and controllers depending on add/edit mode.
     _journalEdit = JournalEdit(action: 'Cancel', journal: widget.journalEdit.journal);
     _title = widget.add ? 'Add' : 'Edit';
     _journalEdit.journal = widget.journalEdit.journal;
